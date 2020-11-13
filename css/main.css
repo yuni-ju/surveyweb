@@ -1,9 +1,18 @@
 @charset "utf-8";
 
+body{
+    margin: 0;
+}
+
 div{ 
     text-align:center; 
     font-size:20px; 
 }
+
+a{
+    text-decoration: none;
+}
+
 .top_bar{
     display:flex;
     align-items: center;
