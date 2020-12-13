@@ -13,6 +13,11 @@ a{
     text-decoration: none;
 }
 
+input{
+    float:left;
+    margin-left:50px;
+}
+
 .top_bar{
     display:flex;
     align-items: center;

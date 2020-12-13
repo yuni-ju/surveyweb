@@ -117,15 +117,6 @@ app.get('/joinsv', function(request, response) {
 	
 });
 
-app.get('/enrollsv', function(request, response) {
-	if (request.session.loggedin) {
-		response.sendFile(path.join(__dirname + '/my/enrollsv.html'));
-	} else {
-		response.send('Please login to view this page!');
-		response.end();
-	}
-});
-
 app.get('/mypage', function(request, response) {
 	if (request.session.loggedin) {
 		response.sendFile(path.join(__dirname + '/my/mypage.html'));
@@ -166,34 +157,44 @@ app.get('/delete/:id', function (request, response) {
         response.redirect('/board');
     });
 });
-app.get('/insert', function (request, response) {	
-    
-    fs.readFile(__dirname + '/board/insert.html', 'utf8', function (error, data) {
-        
-        response.send(data);
-    });
-});
 
 ///////////////글 업로드
 
-app.post('/insert', function (request, response) {
+app.get('/enrollsv', function(request, response) {
+	if (request.session.loggedin) {
+		response.render(__dirname + '/my/enrollsv.html',{login:request.session.loggedin, username:request.session.username});		
+	} else {
+		response.send('Please login to view this page!');
+		response.end();
+	}
+});
+
+app.post('/enrollsv', function (request, response) {
 
 	var body = request.body;
-	var username = request.body.username;
+	var username = request.session.username;
 
-    connection.query('INSERT INTO survey (id, title, content, photo ,reward) VALUES (?, ?, ?, ?, ?)', [
-        username, body.table, body.content, body.photo, body.reward
-    ], function () {
-        
+	console.log(username);
+	console.log(body.title);
+	console.log(body.link);
+	console.log(body.content);
+	console.log(body.photo);
+	console.log(body.reward);
+
+    connection.query('INSERT INTO surveys (id, title, link, content, photo ,reward) VALUES (?, ?, ?, ?, ?, ?)', [
+		username, body.title, body.link, body.content, body.photo, body.reward
+	]
+	, function () {        
         response.redirect('/board');
     });
 });
-app.get('/edit/:id', function (request, response) {
+
+app.get('/edit/:num', function (request, response) {
 
     fs.readFile(__dirname + '/board/edit.html', 'utf8', function (error, data) {
 
-        connection.query('SELECT * FROM surveys WHERE id = ?', [
-            request.param('id')
+        connection.query('SELECT * FROM surveys WHERE num = ?', [
+            request.param('num')
         ], function (error, result) {
             response.send(ejs.render(data, {
                 data: result[0]
@@ -201,10 +202,10 @@ app.get('/edit/:id', function (request, response) {
         });
     });
 });
-app.post('/edit/:id', function (request, response) {
+app.post('/edit/:num', function (request, response) {
     var body = request.body
-    connection.query('UPDATE surveys SET title=?, content=?, photo=?, reward=? WHERE id=?', [
-        body.name, body.modelnumber, body.series, request.param('id')
+    connection.query('UPDATE surveys SET title=?, content=?, photo=?, reward=? WHERE num=?', [
+        body.name, body.modelnumber, body.series, request.param('num')
     ], function () {
         response.redirect('/board');
     });
