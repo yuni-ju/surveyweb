@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Insert Page</title>
+</head>
+<body>
+	<h1>Insert Page</h1>
+	<hr/>
+	<form method="post">
+		<legend>INSERT DATA</legend>
+		<table>
+			<tr>
+				<td><labe>Name</labe></td>
+				<td><input type="text" name="id" value="<%= data.id %>" disabled/></td>
+			</tr>		
+			<tr>
+				<td><labe>Name</labe></td>
+				<td><input type="text" name="name" value="<%= data.name %>" /></td>
+			</tr>
+			<tr>
+				<td><Label>Model Number </Label></td>
+				<td><input type="text" name="modelnumber" value="<%= data.modelnumber %>" /></td>
+			</tr>
+			<tr>
+				<td><label>Series</label></td>
+				<td><input type="text" name="series" value="<%= data.series %>" /></td>
+			</tr>
+		</table>
+		<input type="submit" />
+	</form>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta  charset="utf-8">
+        <link rel = "stylesheet" type = "text/css" href="css/main.css">
+        <script defer src="/__/firebase/6.6.2/firebase-app.js"></script>
+        <script defer src="/__/firebase/init.js"></script>
+    </head>
+    <!-- body -->   
+    <body> 
+        <!-- top bar -->  
+        <div class="top_bar">
+            <div style="flex-grow: 1; width: 300px;"></div>
+            <div style="flex-grow: 1; width: 300px;">
+                <a href="/"> <img style="height: 50px; vertical-align: middle;" src="img/logo.png"> </a>
+            </div>
+            <div style="flex-grow: 1; width: 300px; white-space: nowrap;">
+                <div class="login"> <a href="login.html" style="color: rgb(121, 121, 121);"> 로그인 </a></div>
+                <div style="display:inline; font-size: 25px; color: rgb(121, 121, 121); margin-left: 4px; margin-right: 4px;">&middot;</div>
+                <div class="join"> <a href="signup.html" style="color: rgb(121, 121, 121);"> 회원가입 </a></div>
+            </div>
+        </div>
+        <!-- menu bar -->
+        <div class="menu_bar">
+            <div> <a href = "joinsv.html" style="color: rgb(87, 87, 87);"> <b>설문참여</b> </a></div>
+            <div> <a href="enrollsv.html" style="color: rgb(87, 87, 87);"> <b>설문등록</b> </a></div>
+            <div> <a href="mypage.html" style="color: rgb(87, 87, 87);"> <b>마이페이지</b> </a></div>
+        </div>
+        <!-- content -->  
+        <div class="main_con">      
+            <div style="width:1100px; margin:0 auto;">
+                <div style="display: inline-block; width: 1100px; height: 100%; ">
+                    
+                <p style="text-align:left;">설문 등록</p>
+
+                <form method="post" enctype="multipart/form-data">
+                    <table>
+                        <tr>
+                            <td><labe>제목</labe></td>
+                            <td><input type="text" name="title" /></td>
+                        </tr>
+                        <tr>
+                            <td><Label>내용</Label></td>
+                            <td><input type="text" name="content" /></td>
+                        </tr>
+                            <td><label>사진</label></td>
+                            <td><input type="file" class="file-select" accept="image/*" name="photo"/></td>
+                        <tr>
+                            <td><label>보상</label></td>
+                            <td><input type="text" name="reward" /></td>
+                        </tr>
+                    </table>
+                    <input type="submit" />
+                </form>
+
+                <!--파일 업로드-->
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const storageRef = firebase.storage().ref();
+                        let selectedFile;
+                    
+                        // File 선택
+                        document.querySelector('.file-select').addEventListener('change', e => {
+                            selectedFile = e.target.files[0];
+                        });
+                    
+                        // File 업로드
+                        document.querySelector('.file-submit').addEventListener('click', () => {
+                            storageRef
+                                    .child(`images/${selectedFile.name}`)
+                                    .put(selectedFile)
+                                    .on('state_changed', snapshot => {
+                                                                console.log(snapshot)
+                                                            }, error => {
+                                                                console.log(error);
+                                                            }, () => {
+                                                                console.log('성공');
+                                                            }
+                                    );
+                        });
+                    });
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
