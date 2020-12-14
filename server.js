@@ -43,6 +43,7 @@ function restrict(req, res, next) {
   }
 }
 
+///////////// 메인 페이지
 app.get('/', function(request, response) {
 	response.render(__dirname + '/public/main.html', {login:request.session.loggedin, username:request.session.username});
 });
@@ -51,6 +52,8 @@ app.get('/login', function(request, response) {
 	response.sendFile(path.join(__dirname + '/public/login.html'));
 });
 
+
+///////////// 로그인
 app.post('/login', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
@@ -73,6 +76,17 @@ app.post('/login', function(request, response) {
 	}
 });
 
+
+///////////// 로그아웃
+app.get('/logout', function(request, response) {
+	request.session.loggedin = false;
+	  response.send('<center><H1>Logged Out.</H1><H1><a href="/">Goto Home</a></H1></center>');
+	  response.end();
+  });
+  
+
+
+/////////////// 회원가입
 app.get('/register', function(request, response) {
 	response.sendFile(path.join(__dirname + '/my/register.html'));
 });
@@ -106,65 +120,26 @@ app.post('/register', function(request, response) {
 	}
 });
 
-app.get('/logout', function(request, response) {
-  request.session.loggedin = false;
-	response.send('<center><H1>Logged Out.</H1><H1><a href="/">Goto Home</a></H1></center>');
-	response.end();
-});
-
-app.get('/joinsv', function(request, response) {
-	response.sendFile(path.join(__dirname + '/public/joinsv.html'));
-	
-});
-
+//////////////////마이페이지
 app.get('/mypage', function(request, response) {
 	if (request.session.loggedin) {
-		response.sendFile(path.join(__dirname + '/my/mypage.html'));
+		response.render(__dirname + '/my/mypage.html', {
+			login:request.session.loggedin, 
+			username:request.session.username});
 	} else {
-		response.send('Please login to view this page!');
-		response.end();
-	}
-});
-
-app.get('/test2', function(request, response) {
-	if (request.session.loggedin) {
-		response.sendFile(path.join(__dirname + '/my/test2.html'));
-	} else {
-		response.send('Please login to view this page!');
+		response.redirect('/login');
 		response.end();
 	}
 });
 
 
 
-// Board
-app.get('/board', function (request, response) { 
-    
-    fs.readFile(__dirname + '/board/list.html', 'utf8', function (error, data) {
-        
-        connection.query('SELECT * FROM surveys', function (error, results) {
-        
-            response.send(ejs.render(data, {
-                data: results
-            }));
-        });
-    });
-});
-app.get('/delete/:id', function (request, response) { 
-    
-    connection.query('DELETE FROM surveys WHERE num=?', [request.param('num')], function () {
-    
-        response.redirect('/board');
-    });
-});
-
-///////////////글 업로드
-
+///////////////설문 등록
 app.get('/enrollsv', function(request, response) {
 	if (request.session.loggedin) {
 		response.render(__dirname + '/my/enrollsv.html',{login:request.session.loggedin, username:request.session.username});		
 	} else {
-		response.send('Please login to view this page!');
+		response.redirect('/login');
 		response.end();
 	}
 });
@@ -174,40 +149,104 @@ app.post('/enrollsv', function (request, response) {
 	var body = request.body;
 	var username = request.session.username;
 
-	console.log(username);
-	console.log(body.title);
-	console.log(body.link);
-	console.log(body.content);
-	console.log(body.photo);
-	console.log(body.reward);
-
     connection.query('INSERT INTO surveys (id, title, link, content, photo ,reward) VALUES (?, ?, ?, ?, ?, ?)', [
 		username, body.title, body.link, body.content, body.photo, body.reward
 	]
 	, function () {        
-        response.redirect('/board');
+        response.redirect('/joinsv');
     });
 });
 
-app.get('/edit/:num', function (request, response) {
+/////////////////설문 목록
 
-    fs.readFile(__dirname + '/board/edit.html', 'utf8', function (error, data) {
-
-        connection.query('SELECT * FROM surveys WHERE num = ?', [
-            request.param('num')
-        ], function (error, result) {
+app.get('/joinsv', function (request, response) { 
+	
+    fs.readFile(__dirname + '/public/joinsv.html', 'utf8', function (error, data) {
+        
+        connection.query('SELECT * FROM surveys', function (error, results) {        
             response.send(ejs.render(data, {
-                data: result[0]
+				data: results,
+				login:request.session.loggedin,
+				username:request.session.username
             }));
         });
     });
 });
+
+
+////////////////설문 글 페이지
+app.get('/svpage/:num', function (request, response) {
+
+    fs.readFile(__dirname + '/public/svpage.html', 'utf8', function (error, data) {
+        connection.query('SELECT * FROM surveys WHERE num = ?', [
+            request.param('num')
+        ], function (error, result) {			
+            response.send(ejs.render(data, {			
+				data: result[0],
+				login:request.session.loggedin,
+				username:request.session.username
+			}));			
+			
+		});		
+    });
+});
+
+//설문 삭제
+app.get('/delete/:num', function (request, response) { 
+	
+	if (request.session.loggedin) {	
+		var username = request.session.username;		
+		connection.query('DELETE FROM surveys WHERE num=? AND id =?', [ 
+			request.param('num'), username
+		], function () {		
+			response.redirect('/joinsv');
+		});
+		
+	} else {
+		response.redirect('/login');
+		response.end();
+	}    
+});
+
+
+
+//설문 수정
+app.get('/edit/:num', function (request, response) {
+
+	if (request.session.loggedin) {	
+		var username = request.session.username;	
+		
+		console.log(username, request.param('num'));
+
+		fs.readFile(__dirname + '/my/edit.html', 'utf8', function (error, data) {
+			connection.query('SELECT * FROM surveys WHERE num = ? AND id=?', [
+				request.param('num'), username
+			], function (error, result) {
+				response.send(ejs.render(data, {				
+					data: result[0],
+					login:request.session.loggedin,
+					username:request.session.username
+				}));
+			});
+		});
+	}else{
+		response.send(ejs.render(data, {
+			data: result[0],
+			login:request.session.loggedin,
+			username:request.session.username
+		}));		
+		response.end();
+	}
+});
+
 app.post('/edit/:num', function (request, response) {
-    var body = request.body
-    connection.query('UPDATE surveys SET title=?, content=?, photo=?, reward=? WHERE num=?', [
-        body.name, body.modelnumber, body.series, request.param('num')
+	var body = request.body
+	var username = request.session.username;	
+	
+    connection.query('UPDATE surveys SET title=?, link=?, content=?, photo=?, reward=? WHERE num=? AND id=?', [
+		body.title, body.link, body.content, body.photo, body.reward, request.param('num'), username
     ], function () {
-        response.redirect('/board');
+        response.redirect('/svpage/'+request.param('num'));
     });
 });
 

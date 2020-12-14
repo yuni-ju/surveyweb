@@ -36,64 +36,37 @@
         <div class="main_con">      
             <div style="width:1100px; margin:0 auto;">
                 <div style="display: inline-block; width: 1100px; height: 100%; ">
-                    
-                <p style="text-align:left;">설문 등록</p>
-
-                <form action="/enrollsv" method="post">
+					
+					
+				<div style="text-align:left;">설문 내용</p>
+					<form method="post" >
                     <table>
                         <tr>
                             <td><label>제목</label></td>
-                            <td><input type="text" name="title" /></td>
+                            <td><input type="text" name="title" value="<%=data.title%>" /></td>
                         </tr>
                         <tr>
-                            <td><label>링크</label></td>
-                            <td><input type="url" name="link" /></td>
+							<td><label>링크</label></td>
+							<td><input type="text" name="link" value="<%=data.link%>" /></td>
                         </tr>                        
                         <tr>
                             <td><label>내용</label></td>
-                            <td><input type="text" name="content" /></td>
+                            <td><input type="text" name="content" value="<%=data.content%>" /></td>
                         </tr>
                         <tr>
                             <td><label>사진</label></td>
-                            <td><input type="file" name="photo" /></td>
+                            <td><input type="file" name="photo" value="<%=data.photo%>" /></td>
                         </tr>
                         <tr>
                             <td><label>보상</label></td>
-                            <td><input type="text" name="reward" /></td>
+                            <td><input type="text" name="reward" value="<%=data.reward%>" /></td>
                         </tr>
-                    </table>
-                    <input type="submit" style="float:none; margin:0;" />
-                </form>
-
-                <!--파일 업로드-->
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const storageRef = firebase.storage().ref();
-                        let selectedFile;
-                    
-                        // File 선택
-                        document.querySelector('.file-select').addEventListener('change', e => {
-                            selectedFile = e.target.files[0];
-                        });
-                    
-                        // File 업로드
-                        document.querySelector('.file-submit').addEventListener('click', () => {
-                            storageRef
-                                    .child(`images/${selectedFile.name}`)
-                                    .put(selectedFile)
-                                    .on('state_changed', snapshot => {
-                                                                console.log(snapshot)
-                                                            }, error => {
-                                                                console.log(error);
-                                                            }, () => {
-                                                                console.log('성공');
-                                                            }
-                                    );
-                        });
-                    });
-                    </script>
-
-                </div>
+					</table> 
+					
+					<input type="submit" value="확인" style="float:none; margin:0;">
+					<input type="button" value="취소" style="float:none; margin:0;" onclick="location.href='/svpage/<%=data.num %>'">  
+					</form> 
+				</div>
             </div>
         </div>
     </body>
