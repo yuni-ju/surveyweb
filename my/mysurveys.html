@@ -32,9 +32,39 @@
         </div>
         <!-- content -->  
         <div class="main_con">      
-            <div style="width:1100px; margin:0 auto;">          
-                <input type="button" value="내가 쓴 글" onclick="location.href='/mysurveys'">
-                <input type="button" value="회원정보 수정" onclick="location.href='/modifyinfo'">           
+            <div style="width:1100px; margin:0 auto;">
+
+                <!-- 내가 쓴 글 -->
+                <div style="margin-top: 30px;"></div>          
+                <div style="display: inline-block; width: 1100px; text-align: left; font-size: 20px; white-space: nowrap; margin-bottom: 30px">내가 작성한 설문</div>
+                </div>           
+                <div style="margin:0 auto; width:1100px; height: 350px; background-color: rgb(199, 214, 230);">
+                    <table width="100%">
+                        <tr>
+                            <th>num</th>
+                            <th>ID</th>
+                            <th>title</th>
+                            <th>link</th>
+                            <th>content </th>
+                            <th>photo</th>
+                            <th>reward</th>
+                            <th>조회수</th>
+                        </tr>
+                        <% data.forEach(function(item, index) { %>                            
+                            <tr style="cursor:pointer;" onclick="location.href='/svpage/<%= item.num %>'">                
+                                <td><%= item.num %> </td>
+                                <td><%= item.id %> </td>
+                                <td><%= item.title %> </td>
+                                <td><%= item.link %> </td>
+                                <td><%= item.content %> </td>
+                                <td> <img src="<%= item.photo %>" width="30px" height="50px">  </td>
+                                <td><%= item.reward %> </td>  
+                                <td><%= item.views %></td>                          
+                            </tr>                        
+                        <% }); %>
+                    </table>        
+                </div>  
+                </div>
             </div>
         </div>
     </body>

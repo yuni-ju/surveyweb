@@ -37,9 +37,26 @@
                 <img style="width: 1100px; height: 480px; margin-top: 25px; margin-right: 200px;" src="/img/mainimg.png">   
                 <div style="text-align: left; margin-top: 30px; font-size: 20px; white-space: nowrap;">HOT 설문</div>
                 <div class="main_sv">
-                    <div> </div>
-                    <div> </div>
-                    <div> </div>
+                    <table>
+                        <tr>                           
+                            <% data.forEach(function(item, index) { %>                                                    
+                                <td>
+                                    <div>
+                                        <table>
+                                            <tr><td><%= item.num %> </td></tr>
+                                            <tr><td><%= item.id %> </td></tr>
+                                            <tr><td><%= item.title %> </td></tr>
+                                            <tr><td><%= item.link %> </td></tr>
+                                            <tr><td><%= item.content %> </td></tr>
+                                            <tr><td><img src="<%= item.photo %>" width="30px" height="50px">  </td></tr>
+                                            <tr><td><%= item.reward %> </td>  </tr>
+                                            <tr><td><%= item.views %></td></tr>
+                                        </table>
+                                    </div>                                      
+                                </td>                                                          
+                            <% }); %>
+                        </tr>
+                    </table>
                 </div>    
             </div>
             </div>

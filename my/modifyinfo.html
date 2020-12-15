@@ -3,6 +3,10 @@
     <head>
         <meta  charset="utf-8">
         <link rel = "stylesheet" type = "text/css" href="/css/main.css">
+        <script type="text/javascript" src ="/script/storage.js"></script>
+        <script defer src="/__/firebase/6.6.2/firebase-app.js"></script>
+        <script defer src="/__/firebase/init.js"></script>
+        <script src="http://code.jquery.com/jquery-latest.js"></script> 
     </head>
     <!-- body -->   
     <body> 
@@ -32,10 +36,21 @@
         </div>
         <!-- content -->  
         <div class="main_con">      
-            <div style="width:1100px; margin:0 auto;">          
-                <input type="button" value="내가 쓴 글" onclick="location.href='/mysurveys'">
-                <input type="button" value="회원정보 수정" onclick="location.href='/modifyinfo'">           
+            <div style="width:1100px; margin:0 auto;">
+                <div style="display: inline-block; width: 1100px; height: 100%; ">				
+					
+                    <div style="text-align:left;">내 정보</div>                    
+                    <h1>회원정보 수정</h1>
+                    <form action="/modifyinfo" method="POST">
+                        <input type="text" name="username" value="<%=data.username%>" readonly>
+                        <input type="password" name="password" placeholder="Password" required>
+                        <input type="password" name="password2" placeholder="Password" required>
+                        <input type="email" name="email" placeholder="email" value="<%=data.email%>" required>
+                        <input type="submit" value="회원정보 수정">
+                    </form>           
+				</div>
             </div>
-        </div>
+        </div>       
+
     </body>
 </html>

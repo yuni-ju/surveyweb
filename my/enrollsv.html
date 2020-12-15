@@ -40,35 +40,35 @@
             <div style="width:1100px; margin:0 auto;">
                 <div style="display: inline-block; width: 1100px; height: 100%; ">                    
                     <p style="text-align:left;">설문 등록</p>
-                    <form method="post" id="enrollform">
+                    <form method="post" action="/enrollsv">
                         <table>
                             <tr>
                                 <td><label>제목</label></td>
-                                <td><input form="enrollform" type="text" name="title" required /></td>
+                                <td><input type="text" name="title" required /></td>
                             </tr>
                             <tr>
                                 <td><label>링크</label></td>
-                                <td><input form="enrollform" type="text" name="link" required /></td>
+                                <td><input type="text" name="link" required /></td>
                             </tr>                        
                             <tr>
                                 <td><label>내용</label></td>
-                                <td><input form="enrollform" type="text" name="content" required/></td>
+                                <td><input type="text" name="content" required/></td>
                             </tr>
                             <tr>
                                 <td><label>사진</label></td>
                                 <td>
                                     <input style="display: block" type="file" accept="image/*" name="photoImg" id="photoImg" />
                                     <input type="button" onclick="upfile()" value="업로드" />
-                                    <input form="enrollform" style="display: none" type="text" name="photo" id="photo"/>
+                                    <input style="display: none" type="text" name="photo" id="photo"/>
                                     <div id = "myimg"></div>
                                 </td>
                             </tr>
                             <tr>
                                 <td><label>보상</label></td>
-                                <td><input form="enrollform" type="text" name="reward" required/></td>
+                                <td><input type="text" name="reward" required/></td>
                             </tr>
                         </table>
-                        <input type="submit" form="enrollform" style="float:none; margin:0;"/>
+                        <input type="submit" style="float:none; margin:0;"/>
                     </form>
                 </div>                
             </div>

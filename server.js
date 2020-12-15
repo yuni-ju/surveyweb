@@ -45,7 +45,17 @@ function restrict(req, res, next) {
 
 ///////////// 메인 페이지
 app.get('/', function(request, response) {
-	response.render(__dirname + '/public/main.html', {login:request.session.loggedin, username:request.session.username});
+
+	fs.readFile(__dirname + '/public/main.html', 'utf8', function (error, data) {
+        
+        connection.query('SELECT * FROM surveys ORDER BY views DESC limit 3', function (error, results) {        
+            response.send(ejs.render(data, {
+				data: results,
+				login:request.session.loggedin,
+				username:request.session.username
+            }));
+        });
+	});
 });
 
 app.get('/login', function(request, response) {
@@ -70,8 +80,8 @@ app.post('/login', function(request, response) {
 				response.sendFile(path.join(__dirname + '/my/loginerror.html'));
 			}			
 		});
-	} else {
-		response.send('Please enter Username and Password!');
+	} else {		
+		response.send('<script type="text/javascript">alert("username과 password를 입력하세요!"); document.location.href="/login";</script>');	
 		response.end();
 	}
 });
@@ -100,39 +110,28 @@ app.post('/register', function(request, response) {
 	if (username && password && email) {
 		connection.query('SELECT * FROM user WHERE username = ? AND password = ? AND email = ?', [username, password, email], function(error, results, fields) {
 			if (error) throw error;
-			if (results.length <= 0) {
-        connection.query('INSERT INTO user (username, password, email) VALUES(?,?,?)', [username, password, email],
-            function (error, data) {
-                if (error)
-                  console.log(error);
-                else
-                  console.log(data);
-        });
-			  response.send(username + ' Registered Successfully!<br><a href="/">Home</a>');
-			} else {
-				response.send(username + ' Already exists!<br><a href="/">Home</a>');
+			if (results.length <= 0 && password==password2) {
+				connection.query('INSERT INTO user (username, password, email) VALUES(?,?,?)', [username, password, email],
+				function (error, data) {
+					if (error)
+					console.log(error);
+					else
+					console.log(data);
+        		});
+			  response.send(username + '님 회원가입을 환영합니다!<br><a href="/">Home</a>');
+			} else if(password!=password2){				
+				response.send('<script type="text/javascript">alert("입력된 비밀번호가 서로 다릅니다."); document.location.href="/register";</script>');	
+			}
+			else {
+				response.send('<script type="text/javascript">alert("이미 존재하는 아이디 입니다."); document.location.href="/register";</script>');	
 			}			
 			response.end();
 		});
 	} else {
-		response.send('Please enter User Information!');
+		response.send('<script type="text/javascript">alert("모든 정보를 입력하세요"); document.location.href="/register";</script>');	
 		response.end();
 	}
 });
-
-//////////////////마이페이지
-app.get('/mypage', function(request, response) {
-	if (request.session.loggedin) {
-		response.render(__dirname + '/my/mypage.html', {
-			login:request.session.loggedin, 
-			username:request.session.username});
-	} else {
-		response.redirect('/login');
-		response.end();
-	}
-});
-
-
 
 ///////////////설문 등록
 app.get('/enrollsv', function(request, response) {
@@ -152,13 +151,17 @@ app.post('/enrollsv', function (request, response) {
     connection.query('INSERT INTO surveys (id, title, link, content, photo ,reward) VALUES (?, ?, ?, ?, ?, ?)', [
 		username, body.title, body.link, body.content, body.photo, body.reward
 	]
-	, function () {        
-        response.redirect('/joinsv');
-    });
+	,function (error, data) {
+		if (error)
+		console.log(error);
+		else
+		console.log(data);
+		response.redirect('/joinsv');
+		response.end();
+	}); 
 });
 
 /////////////////설문 목록
-
 app.get('/joinsv', function (request, response) { 
 	
     fs.readFile(__dirname + '/public/joinsv.html', 'utf8', function (error, data) {
@@ -187,7 +190,10 @@ app.get('/svpage/:num', function (request, response) {
 				username:request.session.username
 			}));			
 			
-		});		
+		});	
+		connection.query('UPDATE surveys SET views=views+1 WHERE num=?', [
+			request.param('num')
+		])
     });
 });
 
@@ -208,16 +214,12 @@ app.get('/delete/:num', function (request, response) {
 	}    
 });
 
-
-
 //설문 수정
 app.get('/edit/:num', function (request, response) {
 
 	if (request.session.loggedin) {	
 		var username = request.session.username;	
 		
-		console.log(username, request.param('num'));
-
 		fs.readFile(__dirname + '/my/edit.html', 'utf8', function (error, data) {
 			connection.query('SELECT * FROM surveys WHERE num = ? AND id=?', [
 				request.param('num'), username
@@ -230,11 +232,7 @@ app.get('/edit/:num', function (request, response) {
 			});
 		});
 	}else{
-		response.send(ejs.render(data, {
-			data: result[0],
-			login:request.session.loggedin,
-			username:request.session.username
-		}));		
+		response.redirect('/login');
 		response.end();
 	}
 });
@@ -248,6 +246,92 @@ app.post('/edit/:num', function (request, response) {
     ], function () {
         response.redirect('/svpage/'+request.param('num'));
     });
+});
+
+//////////////////마이페이지
+app.get('/mypage', function(request, response) {
+	if (request.session.loggedin) {
+		response.render(__dirname + '/my/mypage.html', {
+			login:request.session.loggedin, 
+			username:request.session.username});
+	} else {
+		response.redirect('/login');
+		response.end();
+	}
+});
+
+//내가 쓴 글 보기
+app.get('/mysurveys', function (request, response) { 
+
+	if (request.session.loggedin) {	
+		var username = request.session.username;
+		fs.readFile(__dirname + '/my/mysurveys.html', 'utf8', function (error, data) {			
+			connection.query('SELECT * FROM surveys WHERE id=?', [
+				username
+			], function (error, results) {        
+				response.send(ejs.render(data, {
+					data: results,
+					login:request.session.loggedin,
+					username:request.session.username
+				}));
+			});
+		});
+	}else{
+		response.redirect('/login');
+		response.end();
+	}
+});
+
+
+//회원 정보 수정
+app.get('/modifyinfo', function (request, response) {
+
+	if (request.session.loggedin) {	
+		var username = request.session.username;	
+		fs.readFile(__dirname + '/my/modifyinfo.html', 'utf8', function (error, data) {
+			connection.query('SELECT * FROM user WHERE username =?', [
+				username
+			], function (error, result) {
+				response.send(ejs.render(data, {				
+					data: result[0],
+					login:request.session.loggedin,
+					username:request.session.username
+				}));
+			});
+		});
+	}else{
+		response.redirect('/login');
+		response.end();
+	}
+});
+
+app.post('/modifyinfo', function (request, response) {
+
+	if(request.session.loggedin){
+		var body = request.body
+		var username = request.session.username;	
+		var password = request.body.password;
+		var password2 = request.body.password2;
+		var email = request.body.email;
+		
+		if(password && email && (password==password2)){
+			connection.query('UPDATE user SET password=?, email=? WHERE username =?', [
+				password, body.email, username
+			], function () {
+				response.redirect('/mypage');
+			});
+		}
+		else if(password!=password2){
+			response.send('<script type="text/javascript">alert("입력된 비밀번호가 서로 다릅니다."); document.location.href="/modifyinfo";</script>');	
+		}
+		else{
+			response.send('<script type="text/javascript">alert("모든 정보를 입력하세요."); document.location.href="/modifyinfo";</script>');	
+		}
+	}else{
+		response.redirect('/login');
+		response.end();
+	}
+
 });
 
 

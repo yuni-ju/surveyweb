@@ -58,19 +58,21 @@
                         <tr>
                             <td><label>사진</label></td>                            
                             <td>                                
-                                <img src="<%= data.photo %>" width="30px" height="50px">
-                                <input type="button" value="수정하기" id="editImg" onclick="editImg()"/>    
+                                <img src="<%= data.photo %>" width="30px" height="50px" id="originImg">
+                                <input type="button" value="수정하기" id="editImgBtn" onclick="editImg();"/>    
                                                             
                                     <!--수정하기 클릭 시-->
-                                    <!-- <script>
-                                    function editImg(){
-                                        document.getElementById('photoImg').style.display='block';                                        
-                                        document.getElementById('editImg').style.display='none';
+                                    <script>
+                                    function editImg(){                                        
+                                        document.getElementById('photoImg').style.display='block';
+                                        document.getElementById('uploadBtn').style.display='block';                                        
+                                        document.getElementById('editImgBtn').style.display='none';
+                                        document.getElementById('originImg').style.display='none';
                                     }
-                                    </script> -->
+                                    </script>
 
-                                    <input style="display: block" type="file" accept="image/*" name="photoImg" id="photoImg" />                                    
-                                    <input style="display: block" type="button" onclick="upfile()" value="업로드" id="uploadBtn" />
+                                    <input style="display: none" type="file" accept="image/*" name="photoImg" id="photoImg" />                                    
+                                    <input style="display: none" type="button" onclick="upfile()" value="업로드" id="uploadBtn" />
                                     <input form="enrollform" style="display: none" type="text" name="photo" id="photo" value="<%=data.photo%>"/>
                                     <div id = "myimg"></div>                                 
                             </td>
