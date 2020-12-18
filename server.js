@@ -113,7 +113,7 @@ app.post('/register', function(request, response) {
 					else
 					console.log(data);
         		});
-			  response.send(username + '님 회원가입을 환영합니다!<br><a href="/">Home</a>');
+			  	response.send('<script type="text/javascript">alert("회원가입을 환영합니다!"); document.location.href="/";</script>');	
 			} else if(password!=password2){				
 				response.send('<script type="text/javascript">alert("입력된 비밀번호가 서로 다릅니다."); document.location.href="/register";</script>');	
 			}
