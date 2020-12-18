@@ -3,54 +3,85 @@
     <head>
         <meta  charset="utf-8">
         <link rel = "stylesheet" type = "text/css" href="/css/main.css">
-        <script type="text/javascript" src ="/script/storage.js"></script>
-        <script defer src="/__/firebase/6.6.2/firebase-app.js"></script>
-        <script defer src="/__/firebase/init.js"></script>
-        <script src="http://code.jquery.com/jquery-latest.js"></script> 
+        <link rel = "stylesheet" type = "text/css" href="/css/svlist.css">
     </head>
     <!-- body -->   
-    <body> 
-        <!-- top bar -->  
-        <div class="top_bar">
-            <div style="flex-grow: 1; width: 300px;"></div>
-            <div style="flex-grow: 1; width: 300px;">
-                <a href="/"> <img style="height: 50px; vertical-align: middle;" src="/img/logo.png"> </a>
+    <body style="height: 100vh">
+        <div class="mainwrapper">
+            <!-- top bar -->
+            <div class="mainimg">
+                    <table class="topbar">
+                        <tr>
+                            <td><a href="/"> <img class="logoimg" src="/img/logo.png"> </a></td>
+                            <td><a href="/hotsv" class="menubartxt"> <b>인기설문</b></a></td>
+                            <td>
+                                <a href="/newsv" class="menubartxt"> <b>최신설문</b></a>
+                            </td>
+                            <td><a href="/enrollsv" class="menubartxt"> <b>설문등록</b></a></td>
+                            <td><a href="/mypage" class="seltxt"> <b>마이페이지</b></a></td>
+                            <td style="width: 170px;">
+                                    <% if(login) {%>
+                                        <a class="logintxt" href="/mypage"> <%=username %> 님 </a>
+                                        <div style="display:inline-block; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;"> &middot;</div>
+                                        <a class="logintxt" href="/logout" style="margin-right:30px;"> 로그아웃 </a>
+                                    <% } else { %>
+                                        <a class="logintxt" href="/login"> 로그인 </a>
+                                        <div style="display:inline; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;"> &middot;</div>
+                                        <a class="logintxt" href="/register" style="margin-right:30px;"> 회원가입 </a>
+                                    <% } %>
+                                </td>
+                        </tr>
+                    </table>
             </div>
-            <div style="flex-grow: 1; width: 300px; white-space: nowrap;">
-                <% if(login) {%>
-                    <div class="login"> <%=username %> 님 환영합니다!</div>
-                    <div style="display:inline; font-size: 25px; color: rgb(121, 121, 121); margin-left: 4px; margin-right: 4px;">&middot;</div>
-                    <div class="join"> <a href="/logout" style="color: rgb(121, 121, 121);"> 로그아웃 </a></div>
-                <% } else { %>
-                    <div class="login"> <a href="/login" style="color: rgb(121, 121, 121);"> 로그인 </a></div>
-                    <div style="display:inline; font-size: 25px; color: rgb(121, 121, 121); margin-left: 4px; margin-right: 4px;">&middot;</div>
-                    <div class="join"> <a href="/register" style="color: rgb(121, 121, 121);"> 회원가입 </a></div>
-                <% } %>
-            </div>
-        </div>
-        <!-- menu bar -->
-        <div class="menu_bar">
-            <div> <a href = "/joinsv" style="color: rgb(87, 87, 87);"> <b>설문참여</b> </a></div>
-            <div> <a href="/enrollsv" style="color: rgb(87, 87, 87);"> <b>설문등록</b> </a></div>
-            <div> <a href="/mypage" style="color: rgb(87, 87, 87);"> <b>마이페이지</b> </a></div>
-        </div>
-        <!-- content -->  
-        <div class="main_con">      
-            <div style="width:1100px; margin:0 auto;">
-                <div style="display: inline-block; width: 1100px; height: 100%; ">				
-					
-                    <div style="text-align:left;">내 정보</div>                    
-                    <h1>회원정보 수정</h1>
+            <!-- content -->
+            <div class="menu_con" style="width:148px; height: 300px; float:left; margin-top: 60px; border-right: 1px solid rgba(27, 27, 27, 0.425);">
+				<ul class="mymenu">
+					<li>
+						<a href="/mypage" style="color: rgb(90, 90, 90);">내가 쓴 글</a>
+					</li>
+					<li>
+						<a href="/modifyinfo" style="color: rgb(71, 37, 57); font-weight: bolder">회원정보 수정</a>
+					</li>
+				</ul>					
+            </div> 
+            <div class="main_cont" style="width:850px; float:left">
+                <!-- 회원정보 수정 -->
+                <div style="margin-top: 80px; height:400px;">
                     <form action="/modifyinfo" method="POST">
-                        <input type="text" name="username" value="<%=data.username%>" readonly>
-                        <input type="password" name="password" placeholder="Password" required>
-                        <input type="password" name="password2" placeholder="Password" required>
-                        <input type="email" name="email" placeholder="email" value="<%=data.email%>" required>
-                        <input type="submit" value="회원정보 수정">
-                    </form>           
-				</div>
+                        <table style="margin-left: 150px;">
+                            <tr><td colspan="2" style="text-align: left; font-size:20px; padding-bottom: 30px;">내 정보</td></tr>                  
+                            <tr>
+                                <td style="text-align: left;">아이디</td>
+                                <td><input type="text" name="username" value="<%=data.username%>" readonly></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left;">비밀번호</td>
+                                <td><input type="password" name="password" placeholder="비밀번호" required></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left;">비밀번호 확인</td>
+                                <td><input type="password" name="password2" placeholder="비밀번호 확인" required></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left;">이메일</td>
+                                <td><input type="email" name="email" placeholder="email" value="<%=data.email%>" required></td>
+                            </tr>
+                            <tr><td colspan="2" style="padding-top:30px;"><input type="submit" value="수정하기"></td></tr>
+                        </table>   
+                    </form>  
+                </div>                           
             </div>
-        </div>       
-
+            <!--bottom banner-->
+            <div class="bottombanner">
+                    <table class="bottable">
+                        <tr>
+                            <td>이용약관</td>
+                            <td>개인정보처리방침</td>
+                            <td>고객문의</td>
+                        </tr>
+                    </table>
+                    <div style="color: rgb(100, 100, 100); font-size: 11px;">Copyright © MODUSURVEY. All Rights Reserved.</div>
+            </div> 
+        </div>  
     </body>
 </html>

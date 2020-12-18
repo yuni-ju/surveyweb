@@ -1,0 +1,93 @@
+@charset "utf-8";
+
+.svframe{
+    width: 75%;
+    margin: 0px auto;
+    border-spacing: 15px 30px;
+    text-align: left;
+}
+
+.newsvtxt{
+    margin-left: 12%; 
+    font-size: 20px;
+    text-align: left; 
+    padding-top: 55px;
+    font-weight: bolder;
+}
+
+.thumbimg{
+    width: 170px; 
+    height: 190px;
+    cursor:pointer;
+}
+
+.thmbtitle{
+    padding-left: 3px;
+    font-size: 16px;
+    font-weight: border;
+    cursor:pointer;
+}
+
+.thumbreward{
+    padding-left: 3px;
+    font-size: 12px;
+    cursor:pointer;
+}
+
+.thumbviews{
+    padding-left: 3px;
+    color: rgb(136, 136, 136);
+    font-size: 12px;
+    cursor:pointer;
+}
+
+.hotthumbimg{
+    width: 120px;
+    height: 150px; 
+    cursor:pointer;
+}
+
+.hotthumbtitle{
+    font-size: 20px;
+    font-weight: border;
+    cursor:pointer;
+}
+
+.hotthumbcontent{
+    font-size: 15px;
+    cursor:pointer;
+    vertical-align: top;
+    height: 65px;
+}
+
+.hotthumbreward{   
+    color: rgb(46, 46, 46);
+    font-size: 13px;
+    cursor:pointer;
+    padding-bottom: 20px;
+    width: 130px;
+}
+
+.hotthumbviews{
+    color: rgb(136, 136, 136);
+    font-size: 13px;
+    cursor:pointer;
+    padding-bottom: 20px;
+}
+
+.mytable td , th{
+    border-bottom: 1px solid rgba(85, 83, 83, 0.473);
+    height: 30px;
+}
+
+.mymenu{
+    text-decoration: none;
+    color: rgb(49, 49, 49);
+    list-style: none;
+    text-align: left;
+    padding-left: 5px;
+}
+
+.mymenu li{
+    height: 40px;
+}

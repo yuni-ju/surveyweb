@@ -1,65 +1,62 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta  charset="utf-8">
-        <link rel = "stylesheet" type = "text/css" href="/css/main.css">
-        <script type="text/javascript" src ="/script/storage.js"></script>
-    </head>
-    <!-- body -->   
-    <body>         
-        <!-- top bar -->  
-        <div class="top_bar">
-            <div style="flex-grow: 1; width: 300px;"></div>
-            <div style="flex-grow: 1; width: 300px;">
-                <a href="/"> <img style="height: 50px; vertical-align: middle;" src="/img/logo.png"> </a>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <script type="text/javascript" src="/script/storage.js"></script>
+</head>
+<!-- body -->
+<body style="height: 100vh">
+    <div class="mainwrapper" style="height: 580px;">
+        <div class="mainimg" style="width: 100%; height: 100%;">
+            <!-- top bar -->
+            <table class="topbar">
+                <tr>
+                    <td><a href="/"> <img class="logoimg" src="/img/logo.png"> </a></td>
+                    <td><a href="/hotsv" class="menubartxt"> <b>인기설문</b></a></td>
+                    <td><a href="/newsv" class="menubartxt"> <b>최신설문</b></a></td>
+                    <td><a href="/enrollsv" class="menubartxt"> <b>설문등록</b></a></td>
+                    <td><a href="/mypage" class="menubartxt"> <b>마이페이지</b></a></td>
+                    <td style="width: 170px;">
+                        <% if(login) {%>
+                            <a class="logintxt" href="/mypage"> <%=username %> 님 </a>
+                            <div style="display:inline-block; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;"> &middot;</div>
+                            <a class="logintxt" href="/logout" style="margin-right:30px;"> 로그아웃 </a>
+                        <% } else { %>
+                            <a class="logintxt" href="/login"> 로그인 </a>
+                            <div style="display:inline; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;"> &middot;</div>
+                            <a class="logintxt" href="/register" style="margin-right:30px;"> 회원가입 </a>
+                        <% } %>
+                    </td>
+                </tr>
+            </table>
+
+            <!--설명 글-->
+            <div style="margin-left: 90px; margin-top: 50px;">
+                <div style="display: block; text-align: left;  margin-left: 5px; margin-bottom:10px;">설문조사를 모두 모아 </div>
+                <img style="display: block" src="/img/shadowlogo.png"/>
+                <div style="display: block; text-align: left; margin-left: 5px; margin-top:30px;">
+                    설문참여로 선물 받고 싶을 때<br>
+                    설문조사 홍보가 힘들 때<br>
+                </div>
+                <img style="display: block; width: 100px; height: 35px; margin-top: 30px; margin-left: 5px; cursor: pointer" src="/img/enrollbtn.png" onclick="location.href='/newsv'">
             </div>
-            <div style="flex-grow: 1; width: 300px; white-space: nowrap;">
-                <% if(login) {%>
-					<div class="login"> <%=username %> 님 환영합니다!</div>
-					<div style="display:inline; font-size: 25px; color: rgb(121, 121, 121); margin-left: 4px; margin-right: 4px;">&middot;</div>
-					<div class="join"> <a href="/logout" style="color: rgb(121, 121, 121);"> 로그아웃 </a></div>
-				<% } else { %>
-					<div class="login"> <a href="/login" style="color: rgb(121, 121, 121);"> 로그인 </a></div>
-					<div style="display:inline; font-size: 25px; color: rgb(121, 121, 121); margin-left: 4px; margin-right: 4px;">&middot;</div>
-					<div class="join"> <a href="/register" style="color: rgb(121, 121, 121);"> 회원가입 </a></div>
-				<% } %>
-			</div>
+            
+            
         </div>
-        <!-- menu bar -->
-        <div class="menu_bar">
-            <div> <a href = "/joinsv" style="color: rgb(87, 87, 87);"> <b>설문참여</b> </a></div>
-            <div> <a href="/enrollsv" style="color: rgb(87, 87, 87);"> <b>설문등록</b> </a></div>
-            <div> <a href="/mypage" style="color: rgb(87, 87, 87);"> <b>마이페이지</b> </a></div>
+        <!--bottom banner-->
+        <div class="bottombanner">
+            <table class="bottable">
+                <tr>
+                    <td>이용약관</td>
+                    <td>개인정보처리방침</td>
+                    <td>고객문의</td>
+                </tr>
+            </table>
+            <div style="color: rgb(100, 100, 100); font-size: 11px;">Copyright © MODUSURVEY. All Rights Reserved.</div>
         </div>
-        <!-- content -->  
-        <div class="main_con">      
-            <div style="width:1100px; margin:0 auto;">          
-                <img style="width: 1100px; height: 480px; margin-top: 25px; margin-right: 200px;" src="/img/mainimg.png">   
-                <div style="text-align: left; margin-top: 30px; font-size: 20px; white-space: nowrap;">HOT 설문</div>
-                <div class="main_sv">
-                    <table>
-                        <tr>                           
-                            <% data.forEach(function(item, index) { %>                                                    
-                                <td>
-                                    <div>
-                                        <table>
-                                            <tr><td><%= item.num %> </td></tr>
-                                            <tr><td><%= item.id %> </td></tr>
-                                            <tr><td><%= item.title %> </td></tr>
-                                            <tr><td><%= item.link %> </td></tr>
-                                            <tr><td><%= item.content %> </td></tr>
-                                            <tr><td><img src="<%= item.photo %>" width="30px" height="50px">  </td></tr>
-                                            <tr><td><%= item.reward %> </td>  </tr>
-                                            <tr><td><%= item.views %></td></tr>
-                                        </table>
-                                    </div>                                      
-                                </td>                                                          
-                            <% }); %>
-                        </tr>
-                    </table>
-                </div>    
-            </div>
-            </div>
-        </div>
-    </body>  
+    </div>
+</body>
+
 </html>

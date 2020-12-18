@@ -46,16 +46,11 @@ function restrict(req, res, next) {
 ///////////// 메인 페이지
 app.get('/', function(request, response) {
 
-	fs.readFile(__dirname + '/public/main.html', 'utf8', function (error, data) {
-        
-        connection.query('SELECT * FROM surveys ORDER BY views DESC limit 3', function (error, results) {        
-            response.send(ejs.render(data, {
-				data: results,
-				login:request.session.loggedin,
-				username:request.session.username
-            }));
-        });
+	response.render(__dirname + '/public/main.html',{
+		login:request.session.loggedin, 
+		username:request.session.username
 	});
+	
 });
 
 app.get('/login', function(request, response) {
@@ -77,7 +72,7 @@ app.post('/login', function(request, response) {
 				response.end();
 			} else {
 				//response.send('Incorrect Username and/or Password!');
-				response.sendFile(path.join(__dirname + '/my/loginerror.html'));
+				response.send('<script type="text/javascript">alert("로그인 정보가 일치하지 않습니다."); document.location.href="/login";</script>');	
 			}			
 		});
 	} else {		
@@ -90,15 +85,15 @@ app.post('/login', function(request, response) {
 ///////////// 로그아웃
 app.get('/logout', function(request, response) {
 	request.session.loggedin = false;
-	  response.send('<center><H1>Logged Out.</H1><H1><a href="/">Goto Home</a></H1></center>');
-	  response.end();
+	response.send('<script type="text/javascript">alert("성공적으로 로그아웃 되었습니다."); document.location.href="/";</script>');	
+	response.end();
   });
   
 
 
 /////////////// 회원가입
 app.get('/register', function(request, response) {
-	response.sendFile(path.join(__dirname + '/my/register.html'));
+	response.sendFile(path.join(__dirname + '/public/register.html'));
 });
 
 app.post('/register', function(request, response) {
@@ -156,17 +151,33 @@ app.post('/enrollsv', function (request, response) {
 		console.log(error);
 		else
 		console.log(data);
-		response.redirect('/joinsv');
+		response.redirect('/newsv');
 		response.end();
 	}); 
 });
 
-/////////////////설문 목록
-app.get('/joinsv', function (request, response) { 
-	
-    fs.readFile(__dirname + '/public/joinsv.html', 'utf8', function (error, data) {
+/////////////////인기 설문
+app.get('/hotsv', function(request, response) {
+
+	fs.readFile(__dirname + '/public/hotsv.html', 'utf8', function (error, data) {
         
-        connection.query('SELECT * FROM surveys', function (error, results) {        
+        connection.query('SELECT * FROM surveys ORDER BY views DESC limit 3', function (error, results) {        
+            response.send(ejs.render(data, {
+				data: results,
+				login:request.session.loggedin,
+				username:request.session.username
+            }));
+        });
+	});
+});
+
+
+/////////////////최신 설문
+app.get('/newsv', function (request, response) { 
+	
+    fs.readFile(__dirname + '/public/newsv.html', 'utf8', function (error, data) {
+        
+        connection.query('SELECT * FROM surveys ORDER BY num DESC', function (error, results) {        
             response.send(ejs.render(data, {
 				data: results,
 				login:request.session.loggedin,
@@ -189,7 +200,6 @@ app.get('/svpage/:num', function (request, response) {
 				login:request.session.loggedin,
 				username:request.session.username
 			}));			
-			
 		});	
 		connection.query('UPDATE surveys SET views=views+1 WHERE num=?', [
 			request.param('num')
@@ -205,7 +215,7 @@ app.get('/delete/:num', function (request, response) {
 		connection.query('DELETE FROM surveys WHERE num=? AND id =?', [ 
 			request.param('num'), username
 		], function () {		
-			response.redirect('/joinsv');
+			response.redirect('/newsv');
 		});
 		
 	} else {
@@ -249,23 +259,11 @@ app.post('/edit/:num', function (request, response) {
 });
 
 //////////////////마이페이지
-app.get('/mypage', function(request, response) {
-	if (request.session.loggedin) {
-		response.render(__dirname + '/my/mypage.html', {
-			login:request.session.loggedin, 
-			username:request.session.username});
-	} else {
-		response.redirect('/login');
-		response.end();
-	}
-});
-
-//내가 쓴 글 보기
-app.get('/mysurveys', function (request, response) { 
+app.get('/mypage', function (request, response) { 
 
 	if (request.session.loggedin) {	
 		var username = request.session.username;
-		fs.readFile(__dirname + '/my/mysurveys.html', 'utf8', function (error, data) {			
+		fs.readFile(__dirname + '/my/mypage.html', 'utf8', function (error, data) {			
 			connection.query('SELECT * FROM surveys WHERE id=?', [
 				username
 			], function (error, results) {        
@@ -281,7 +279,6 @@ app.get('/mysurveys', function (request, response) {
 		response.end();
 	}
 });
-
 
 //회원 정보 수정
 app.get('/modifyinfo', function (request, response) {

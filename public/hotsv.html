@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta  charset="utf-8">
+        <link rel = "stylesheet" type = "text/css" href="/css/main.css">
+        <link rel = "stylesheet" type = "text/css" href="/css/svlist.css">
+    </head>
+    <!-- body -->   
+    <body> 
+        <div class="mainwrapper">
+            <!-- top bar -->
+            <div class="mainimg">
+                <table class="topbar">
+                    <tr>
+                        <td><a href="/"> <img class="logoimg" src="/img/logo.png"> </a></td>
+                        <td><a href="/hotsv" class="seltxt"> <b>인기설문</b></a></td>
+                        <td>
+                            <a href="/newsv" class="menubartxt"> <b>최신설문</b></a>
+                        </td>
+                        <td><a href="/enrollsv" class="menubartxt"> <b>설문등록</b></a></td>
+                        <td><a href="/mypage" class="menubartxt"> <b>마이페이지</b></a></td>
+                        <td style="width: 170px;">
+                                <% if(login) {%>
+                                    <a class="logintxt" href="/mypage"> <%=username %> 님 </a>
+                                    <div style="display:inline-block; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;"> &middot;</div>
+                                    <a class="logintxt" href="/logout" style="margin-right:30px;"> 로그아웃 </a>
+                                <% } else { %>
+                                    <a class="logintxt" href="/login"> 로그인 </a>
+                                    <div style="display:inline; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;"> &middot;</div>
+                                    <a class="logintxt" href="/register" style="margin-right:30px;"> 회원가입 </a>
+                                <% } %>
+                            </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- content -->  
+            <div class="main_con">            
+                <!-- 인기 설문 -->            
+                <div class="newsvtxt">TOP 3 설문</div> 
+                <table class="svframe" style="text-overflow: ellipsis;">                                   
+                    <% data.forEach(function(item, index) { %>
+                    <tr>   
+                        <td style="border-bottom: 1px solid rgba(85, 83, 83, 0.473);">
+                            <table class="svthumbnail" style="border-spacing: 20px 10px;" onclick="location.href='/svpage/<%= item.num %>'">
+                                <tr>
+                                    <td rowspan="5"><img class="hotthumbimg"; src="<%= item.photo %>"></td>
+                                </tr>
+                                <tr><td colspan="2" class="hotthumbtitle"><%= item.title %> </td></tr>
+                                <tr><td colspan="2" class="hotthumbcontent"><%= item.content %> </td></tr>
+                                <tr>
+                                    <td class="hotthumbreward"><%= item.reward %> 제공</td>
+                                    <td class="hotthumbviews"><%= item.views %> views</td></tr>
+                            </table>                           
+                        </td>  
+                    </tr>                                                    
+                <% }); %>               
+                </table>
+            </div>
+            <!--bottom banner-->
+            <div class="bottombanner">
+                    <table class="bottable">
+                        <tr>
+                            <td>이용약관</td>
+                            <td>개인정보처리방침</td>
+                            <td>고객문의</td>
+                        </tr>
+                    </table>
+                    <div style="color: rgb(100, 100, 100); font-size: 11px;">Copyright © MODUSURVEY. All Rights Reserved.</div>
+            </div> 
+        </div>  
+    </body>
+</html>

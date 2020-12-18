@@ -1,72 +1,103 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta  charset="utf-8">
-        <link rel = "stylesheet" type = "text/css" href="/css/main.css">
-        <script defer src="/__/firebase/6.6.2/firebase-app.js"></script>
-        <script defer src="/__/firebase/init.js"></script>
-    </head>
-    <!-- body -->   
-    <body> 
-        <!-- top bar -->  
-        <div class="top_bar">
-            <div style="flex-grow: 1; width: 300px;"></div>
-            <div style="flex-grow: 1; width: 300px;">
-                <a href="/"> <img style="height: 50px; vertical-align: middle;" src="/img/logo.png"> </a>
-            </div>
-            <div style="flex-grow: 1; width: 300px; white-space: nowrap;">
-                <% if(login) {%>
-                    <div class="login"> <%=username %> 님 환영합니다!</div>
-                    <div style="display:inline; font-size: 25px; color: rgb(121, 121, 121); margin-left: 4px; margin-right: 4px;">&middot;</div>
-                    <div class="join"> <a href="/logout" style="color: rgb(121, 121, 121);"> 로그아웃 </a></div>
-                <% } else { %>
-                    <div class="login"> <a href="/login" style="color: rgb(121, 121, 121);"> 로그인 </a></div>
-                    <div style="display:inline; font-size: 25px; color: rgb(121, 121, 121); margin-left: 4px; margin-right: 4px;">&middot;</div>
-                    <div class="join"> <a href="/register" style="color: rgb(121, 121, 121);"> 회원가입 </a></div>
-                <% } %>
-            </div>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <style>
+    .contable td, th{
+        border-bottom: 1px solid gray;
+    }
+    </style>
+</head>
+<!-- body -->
+
+<body>
+    <div class="mainwrapper">
+        <!-- top bar -->
+        <div class="mainimg">
+            <table class="topbar">
+                <tr>
+                    <td><a href="/"> <img class="logoimg" src="/img/logo.png"> </a></td>
+                    <td><a href="/hotsv" class="menubartxt"> <b>인기설문</b></a></td>
+                    <td>
+                        <a href="/newsv" class="menubartxt"> <b>최신설문</b></a>
+                    </td>
+                    <td><a href="/enrollsv" class="menubartxt"> <b>설문등록</b></a></td>
+                    <td><a href="/mypage" class="menubartxt"> <b>마이페이지</b></a></td>
+                    <td style="width: 170px;">
+                        <% if(login) {%>
+                        <a class="logintxt" href="/mypage"> <%=username %> 님 </a>
+                        <div
+                            style="display:inline-block; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;">
+                            &middot;</div>
+                        <a class="logintxt" href="/logout" style="margin-right:30px;"> 로그아웃 </a>
+                        <% } else { %>
+                        <a class="logintxt" href="/login"> 로그인 </a>
+                        <div
+                            style="display:inline; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;">
+                            &middot;</div>
+                        <a class="logintxt" href="/register" style="margin-right:30px;"> 회원가입 </a>
+                        <% } %>
+                    </td>
+                </tr>
+            </table>
         </div>
-        <!-- menu bar -->
-        <div class="menu_bar">
-            <div> <a href = "/joinsv" style="color: rgb(87, 87, 87);"> <b>설문참여</b> </a></div>
-            <div> <a href="/enrollsv" style="color: rgb(87, 87, 87);"> <b>설문등록</b> </a></div>
-            <div> <a href="/mypage" style="color: rgb(87, 87, 87);"> <b>마이페이지</b> </a></div>
+        <!-- content -->
+        <div class="main_con">
+            <div style="padding-top: 55px;"></div> 
+            <form method="post" action="/enrollsv">
+                <table class="contable" style="margin: 0px auto; text-align: left;">                 
+                    <tr>
+                        <th>제목</th>
+                        <td style="width:500px; padding-left: 20px;"><%=data.title%></td>
+                    </tr>
+                    <tr>
+                        <th>작성자</th>                        
+                        <td style="width:500px; padding-left: 20px;"><%= data.id %></td>
+                    </tr>
+                    <tr>
+                        <th>링크</th>                        
+                        <td style="width:500px; padding-left: 20px;"><%= data.link %></td>
+                    </tr>
+                    <tr>
+                        <th>내용</th>
+                        <td style="width:500px; height:100px; padding-left: 20px;"><%= data.content %></td>
+                    </tr>
+                    <tr>
+                        <th>사진</th>
+                        <td style="width: 500px; padding-left: 20px;">
+                            <img src="<%= data.photo %>" width="200px" height="250px">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>보상</th>
+                        <td style="width:500px; padding-left: 20px;"><%= data.reward %></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding:30px 0px;  text-align: right; float:none; margin:0; border-bottom: none;"> 
+                            <%if(username == data.id) {%>
+                            <input type="button" value="수정" style="float:none; margin:0;" onclick="location.href='/edit/<%= data.num %>'" />
+                            <input type="button" value="삭제" style="float:none; margin:0;" onclick="location.href='/delete/<%= data.num %>'" />
+                            <%}%>
+                            <input type="button" value="목록" style="float:none; margin:0;" onclick="location.href='/newsv'" />
+                        </td>
+                    </tr>
+                </table>   
+            </form>  
         </div>
-        <!-- content -->  
-        <div class="main_con">      
-            <div style="width:1100px; margin:0 auto;">
-                <div style="display: inline-block; width: 1100px; height: 100%; ">
-                    
-                <div style="text-align:left;">설문 내용</p>
-                    <table>
-                        <tr>
-                            <td><label>제목</label></td>
-                            <td><%= data.title %></td>
-                        </tr>
-                        <tr>
-                            <td><label>링크</label></td>
-                            <td><%= data.link %></td>
-                        </tr>                        
-                        <tr>
-                            <td><label>내용</label></td>
-                            <td><%= data.content %></td>
-                        </tr>
-                        <tr>
-                            <td><label>사진</label></td>
-                            <td><img src="<%= data.photo %>" width="30px" height="50px"> </td>
-                        </tr>
-                        <tr>
-                            <td><label>보상</label></td>
-                            <td><%= data.reward %></td>
-                        </tr>                    
-                    </table>    
-                    <%if(username == data.id) {%>
-                    <input type="button" value="수정" style="float:none; margin:0;" onclick="location.href='/edit/<%= data.num %>'" />
-                    <input type="button" value="삭제" style="float:none; margin:0;" onclick="location.href='/delete/<%= data.num %>'" />
-                    <input type="button" value="목록" style="float:none; margin:0;" onclick="location.href='/joinsv'" />
-                    <%}%>    
-                </div>
-            </div>
+    </div>
+
+        <!--bottom banner-->
+        <div class="bottombanner">
+            <table class="bottable">
+                <tr>
+                    <td>이용약관</td>
+                    <td>개인정보처리방침</td>
+                    <td>고객문의</td>
+                </tr>
+            </table>
+            <div style="color: rgb(100, 100, 100); font-size: 11px;">Copyright © MODUSURVEY. All Rights Reserved.</div>
         </div>
     </body>
 </html>

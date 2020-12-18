@@ -3,39 +3,81 @@
     <head>
         <meta  charset="utf-8">
         <link rel = "stylesheet" type = "text/css" href="/css/main.css">
+        <link rel = "stylesheet" type = "text/css" href="/css/svlist.css">
     </head>
     <!-- body -->   
-    <body> 
-        <!-- top bar -->  
-        <div class="top_bar">
-            <div style="flex-grow: 1; width: 300px;"></div>
-            <div style="flex-grow: 1; width: 300px;">
-                <a href="/"> <img style="height: 50px; vertical-align: middle;" src="/img/logo.png"> </a>
+    <body style="height: 100vh">
+        <div class="mainwrapper">
+            <!-- top bar -->
+            <div class="mainimg">
+                    <table class="topbar">
+                        <tr>
+                            <td><a href="/"> <img class="logoimg" src="/img/logo.png"> </a></td>
+                            <td><a href="/hotsv" class="menubartxt"> <b>인기설문</b></a></td>
+                            <td>
+                                <a href="/newsv" class="menubartxt"> <b>최신설문</b></a>
+                            </td>
+                            <td><a href="/enrollsv" class="menubartxt"> <b>설문등록</b></a></td>
+                            <td><a href="/mypage" class="seltxt"> <b>마이페이지</b></a></td>
+                            <td style="width: 170px;">
+                                    <% if(login) {%>
+                                        <a class="logintxt" href="/mypage"> <%=username %> 님 </a>
+                                        <div style="display:inline-block; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;"> &middot;</div>
+                                        <a class="logintxt" href="/logout" style="margin-right:30px;"> 로그아웃 </a>
+                                    <% } else { %>
+                                        <a class="logintxt" href="/login"> 로그인 </a>
+                                        <div style="display:inline; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;"> &middot;</div>
+                                        <a class="logintxt" href="/register" style="margin-right:30px;"> 회원가입 </a>
+                                    <% } %>
+                                </td>
+                        </tr>
+                    </table>
             </div>
-            <div style="flex-grow: 1; width: 300px; white-space: nowrap;">
-                <% if(login) {%>
-                    <div class="login"> <%=username %> 님 환영합니다!</div>
-                    <div style="display:inline; font-size: 25px; color: rgb(121, 121, 121); margin-left: 4px; margin-right: 4px;">&middot;</div>
-                    <div class="join"> <a href="/logout" style="color: rgb(121, 121, 121);"> 로그아웃 </a></div>
-                <% } else { %>
-                    <div class="login"> <a href="/login" style="color: rgb(121, 121, 121);"> 로그인 </a></div>
-                    <div style="display:inline; font-size: 25px; color: rgb(121, 121, 121); margin-left: 4px; margin-right: 4px;">&middot;</div>
-                    <div class="join"> <a href="/register" style="color: rgb(121, 121, 121);"> 회원가입 </a></div>
-                <% } %>
+            <!-- content -->
+            <div class="menu_con" style="width:148px; height: 300px; float:left; margin-top: 60px; border-right: 1px solid rgba(27, 27, 27, 0.425);">
+				<ul class="mymenu">
+					<li>
+						<a href="/mypage" style="color: rgb(71, 37, 57); font-weight: bolder">내가 쓴 글</a>
+					</li>
+					<li>
+						<a href="/modifyinfo" style="color: rgb(90, 90, 90);">회원정보 수정</a>
+					</li>
+				</ul>					
+            </div> 
+            <div class="main_cont" style="width:850px; float:left">
+				<!-- 내가 쓴 글 -->
+				<div style="margin-top: 80px;"></div>          
+                <div style="margin:0 auto; width: 500px; height: 400px; ">
+                    <div colspan="2" style="text-align: left; font-size:20px; padding-bottom: 30px;">게시한 설문 목록</div>
+					<table class="mytable" style=" background-color: rgba(202, 202, 202, 0.3); width: 500px;">
+						<tr>
+                            <th>번호</th>
+							<th>제목</th>
+							<th>보상</th>
+							<th>조회수</th>
+						</tr>
+						<% data.forEach(function(item, index) { %>                            
+							<tr style="cursor:pointer;" onclick="location.href='/svpage/<%= item.num %>'">                
+                                <td width="20px;"><%=item.num %></td>
+                                <td width="200px;"><%= item.title %> </td>
+								<td width="100px;"><%= item.reward %> </td>
+								<td width="10px;"><%= item.views %></td>                          
+							</tr>                        
+						<% }); %>
+					</table>        
+				</div>  
             </div>
-        </div>
-        <!-- menu bar -->
-        <div class="menu_bar">
-            <div> <a href = "/joinsv" style="color: rgb(87, 87, 87);"> <b>설문참여</b> </a></div>
-            <div> <a href="/enrollsv" style="color: rgb(87, 87, 87);"> <b>설문등록</b> </a></div>
-            <div> <a href="/mypage" style="color: rgb(87, 87, 87);"> <b>마이페이지</b> </a></div>
-        </div>
-        <!-- content -->  
-        <div class="main_con">      
-            <div style="width:1100px; margin:0 auto;">          
-                <input type="button" value="내가 쓴 글" onclick="location.href='/mysurveys'">
-                <input type="button" value="회원정보 수정" onclick="location.href='/modifyinfo'">           
-            </div>
-        </div>
+            <!--bottom banner-->
+            <div class="bottombanner">
+                    <table class="bottable">
+                        <tr>
+                            <td>이용약관</td>
+                            <td>개인정보처리방침</td>
+                            <td>고객문의</td>
+                        </tr>
+                    </table>
+                    <div style="color: rgb(100, 100, 100); font-size: 11px;">Copyright © MODUSURVEY. All Rights Reserved.</div>
+            </div> 
+        </div>  
     </body>
 </html>

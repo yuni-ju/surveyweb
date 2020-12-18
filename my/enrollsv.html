@@ -1,171 +1,195 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta  charset="utf-8">
-        <link rel = "stylesheet" type = "text/css" href="/css/main.css">
-        <script type="text/javascript" src ="/script/storage.js"></script>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/svlist.css">
+</head>
+<!-- body -->
+
+<body>
+    <div class="mainwrapper">
+        <!-- top bar -->
+        <div class="mainimg">
+            <table class="topbar">
+                <tr>
+                    <td><a href="/"> <img class="logoimg" src="/img/logo.png"> </a></td>
+                    <td><a href="/hotsv" class="menubartxt"> <b>인기설문</b></a></td>
+                    <td>
+                        <a href="/newsv" class="menubartxt"> <b>최신설문</b></a>
+                    </td>
+                    <td><a href="/enrollsv" class="seltxt"> <b>설문등록</b></a></td>
+                    <td><a href="/mypage" class="menubartxt"> <b>마이페이지</b></a></td>
+                    <td style="width: 170px;">
+                        <% if(login) {%>
+                        <a class="logintxt" href="/mypage"> <%=username %> 님 </a>
+                        <div
+                            style="display:inline-block; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;">
+                            &middot;</div>
+                        <a class="logintxt" href="/logout" style="margin-right:30px;"> 로그아웃 </a>
+                        <% } else { %>
+                        <a class="logintxt" href="/login"> 로그인 </a>
+                        <div
+                            style="display:inline; font-size: 15px; color: rgb(121, 121, 121); margin-left: 5px; margin-right: 5px;">
+                            &middot;</div>
+                        <a class="logintxt" href="/register" style="margin-right:30px;"> 회원가입 </a>
+                        <% } %>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- content -->
+        <div class="main_con">
+            <div style="padding-top: 55px;"></div> 
+            <form method="post" action="/enrollsv">
+                <table style="margin: 0px auto;">
+                    <tr><td colspan="2" style="text-align: left; font-size:20px; font-weight: bolder; padding-bottom: 30px;">설문 등록</td></tr>                  
+                    <tr>
+                        <td>제목</td>
+                        <td><input style="width:500px; margin-left: 20px;" type="text" name="title" required /></td>
+                    </tr>
+                    <tr>
+                        <td>링크</td>
+                        <td><input style="width:500px; margin-left: 20px;" type="text" name="link" required /></td>
+                    </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td><textarea style="width:500px; height: 300px; margin-left: 20px;" name="content" required></textarea></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">사진</td>
+                        <td style="width: 500px; text-align: left; height: 50px;">
+                            <input style="width:200px; padding-left: 20px;" type="file" accept="image/*" name="photoImg"
+                                    id="photoImg" />
+                            <input type="button" onclick="upfile()" value="업로드" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input style="display: none" type="text" name="photo" id="photo" />
+                            <div style="padding-left: 20px; text-align: left;" id="myimg"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>보상</td>
+                        <td><input style="width:500px; margin-left: 20px;" type="text" name="reward" required /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding:30px 0px; float:none; margin:0;"> 
+                            <input type="submit" value="작성" style="margin-right: 5px;" />
+                            <input type="button" value="취소" style="margin-left: 5px;" onclick="history.back()" />
+                        </td>
+                    </tr>
+                </table>   
+            </form>  
+        </div>
+    </div>
+
+        <!--bottom banner-->
+        <div class="bottombanner">
+            <table class="bottable">
+                <tr>
+                    <td>이용약관</td>
+                    <td>개인정보처리방침</td>
+                    <td>고객문의</td>
+                </tr>
+            </table>
+            <div style="color: rgb(100, 100, 100); font-size: 11px;">Copyright © MODUSURVEY. All Rights Reserved.</div>
+        </div>
+
+        <!--파일 업로드-->
         <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-storage.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js"></script>
-    </head>
-    <!-- body -->   
-    <body> 
-        <!-- top bar -->  
-        <div class="top_bar">
-            <div style="flex-grow: 1; width: 300px;"></div>
-            <div style="flex-grow: 1; width: 300px;">
-                <a href="/"> <img style="height: 50px; vertical-align: middle;" src="/img/logo.png"> </a>
-            </div>
-            <div style="flex-grow: 1; width: 300px; white-space: nowrap;">
-                <% if(login) {%>
-                    <div class="login"> <%=username %> 님 환영합니다!</div>
-                    <div style="display:inline; font-size: 25px; color: rgb(121, 121, 121); margin-left: 4px; margin-right: 4px;">&middot;</div>
-                    <div class="join"> <a href="/logout" style="color: rgb(121, 121, 121);"> 로그아웃 </a></div>
-                <% } else { %>
-                    <div class="login"> <a href="/login" style="color: rgb(121, 121, 121);"> 로그인 </a></div>
-                    <div style="display:inline; font-size: 25px; color: rgb(121, 121, 121); margin-left: 4px; margin-right: 4px;">&middot;</div>
-                    <div class="join"> <a href="/register" style="color: rgb(121, 121, 121);"> 회원가입 </a></div>
-                <% } %>
-            </div>
-        </div>
-        <!-- menu bar -->
-        <div class="menu_bar">
-            <div> <a href = "/joinsv" style="color: rgb(87, 87, 87);"> <b>설문참여</b> </a></div>
-            <div> <a href="/enrollsv" style="color: rgb(87, 87, 87);"> <b>설문등록</b> </a></div>
-            <div> <a href="/mypage" style="color: rgb(87, 87, 87);"> <b>마이페이지</b> </a></div>
-        </div>
-        <!-- content -->  
-        <div class="main_con">      
-            <div style="width:1100px; margin:0 auto;">
-                <div style="display: inline-block; width: 1100px; height: 100%; ">                    
-                    <p style="text-align:left;">설문 등록</p>
-                    <form method="post" action="/enrollsv">
-                        <table>
-                            <tr>
-                                <td><label>제목</label></td>
-                                <td><input type="text" name="title" required /></td>
-                            </tr>
-                            <tr>
-                                <td><label>링크</label></td>
-                                <td><input type="text" name="link" required /></td>
-                            </tr>                        
-                            <tr>
-                                <td><label>내용</label></td>
-                                <td><input type="text" name="content" required/></td>
-                            </tr>
-                            <tr>
-                                <td><label>사진</label></td>
-                                <td>
-                                    <input style="display: block" type="file" accept="image/*" name="photoImg" id="photoImg" />
-                                    <input type="button" onclick="upfile()" value="업로드" />
-                                    <input style="display: none" type="text" name="photo" id="photo"/>
-                                    <div id = "myimg"></div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><label>보상</label></td>
-                                <td><input type="text" name="reward" required/></td>
-                            </tr>
-                        </table>
-                        <input type="submit" style="float:none; margin:0;"/>
-                    </form>
-                </div>                
-            </div>
-        </div>
 
-
-    <!--파일 업로드-->
-    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-storage.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js"></script>
-
-    <script>
-        // Your web apps Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyAbf5diDxtGfsIq4_AxeL9xRKqih8kZXQk",
-            authDomain: "modu-survey.firebaseapp.com",
-            databaseURL: "https://modu-survey.firebaseio.com",
-            projectId: "modu-survey",
-            storageBucket: "modu-survey.appspot.com",
-            messagingSenderId: "560434797628",
-            appId: "1:560434797628:web:9df79c7bb8fafe98d43739",
-            measurementId: "G-4W5JPS689E"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
-        function upfile() {
-            // Create a root reference
-            var storageRef = firebase.storage().ref("/images");
-            var file = document.getElementById("photoImg").files[0];
-
-            // Create the file metadata
-            var metadata = {
-                contentType: 'image/jpeg'
+        <script>
+            // Your web apps Firebase configuration
+            var firebaseConfig = {
+                apiKey: "AIzaSyAbf5diDxtGfsIq4_AxeL9xRKqih8kZXQk",
+                authDomain: "modu-survey.firebaseapp.com",
+                databaseURL: "https://modu-survey.firebaseio.com",
+                projectId: "modu-survey",
+                storageBucket: "modu-survey.appspot.com",
+                messagingSenderId: "560434797628",
+                appId: "1:560434797628:web:9df79c7bb8fafe98d43739",
+                measurementId: "G-4W5JPS689E"
             };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            firebase.analytics();
+            function upfile() {
+                // Create a root reference
+                var storageRef = firebase.storage().ref("/images");
+                var file = document.getElementById("photoImg").files[0];
 
-            // Upload file and metadata to the object 'images/mountains.jpg'
-            //var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
+                // Create the file metadata
+                var metadata = {
+                    contentType: 'image/jpeg'
+                };
 
-            var uploadTask = storageRef.child(file.name).put(file, metadata);
+                // Upload file and metadata to the object 'images/mountains.jpg'
+                //var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
 
-            // Listen for state changes, errors, and completion of the upload.
+                var uploadTask = storageRef.child(file.name).put(file, metadata);
 
-            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-                function (snapshot) {
-                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('Upload is ' + progress + '% done');
-                    switch (snapshot.state) {
-                        case firebase.storage.TaskState.PAUSED: // or 'paused'
-                            console.log('Upload is paused');
-                            break;
+                // Listen for state changes, errors, and completion of the upload.
 
-                        case firebase.storage.TaskState.RUNNING: // or 'running'
-                            console.log('Upload is running');
-                            break;
-                    }
+                uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+                    function (snapshot) {
+                        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                        switch (snapshot.state) {
+                            case firebase.storage.TaskState.PAUSED: // or 'paused'
+                                console.log('Upload is paused');
+                                break;
 
-                }, function (error) {
-                    // A full list of error codes is available at
-                    // https://firebase.google.com/docs/storage/web/handle-errors
+                            case firebase.storage.TaskState.RUNNING: // or 'running'
+                                console.log('Upload is running');
+                                break;
+                        }
 
-                    switch (error.code) {
-                        case 'storage/unauthorized':
-                            // User doesn''t have permission to access the object
-                            break;
+                    }, function (error) {
+                        // A full list of error codes is available at
+                        // https://firebase.google.com/docs/storage/web/handle-errors
 
-                        case 'storage/canceled':
-                            // User canceled the upload
-                            break;
+                        switch (error.code) {
+                            case 'storage/unauthorized':
+                                // User doesn''t have permission to access the object
+                                break;
 
-                        case 'storage/unknown':
-                            // Unknown error occurred, inspect error.serverResponse
-                            break;
+                            case 'storage/canceled':
+                                // User canceled the upload
+                                break;
 
-                        default:
-                            // Unknown error occurred, inspect error.serverResponse
-                            alert("upload error");
-                            break;
-                    }
-                }, function () {
-                    // Upload completed successfully, now we can get the download URL
-                    uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-                        //console.log('File available at', downloadURL);
-                        var elem = document.createElement("img");                   
-                        
-                        elem.setAttribute("src", downloadURL);                        
-                        elem.setAttribute("height", "100");
-                        elem.setAttribute("width", "100");
-                        document.getElementById("myimg").appendChild(elem);
+                            case 'storage/unknown':
+                                // Unknown error occurred, inspect error.serverResponse
+                                break;
 
-                        document.getElementById("photo").value = downloadURL;
+                            default:
+                                // Unknown error occurred, inspect error.serverResponse
+                                alert("upload error");
+                                break;
+                        }
+                    }, function () {
+                        // Upload completed successfully, now we can get the download URL
+                        uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                            //console.log('File available at', downloadURL);
+                            var elem = document.createElement("img");
 
+                            elem.setAttribute("src", downloadURL);
+                            elem.setAttribute("height", "120");
+                            elem.setAttribute("width", "100");
+                            document.getElementById("myimg").appendChild(elem);
+
+                            document.getElementById("photo").value = downloadURL;
+
+                        });
                     });
-                });
-        }
-    </script> 
+            }
+        </script>
     </body>
+
 </html>
