@@ -26,6 +26,10 @@
     font-size: 16px;
     font-weight: border;
     cursor:pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    white-space: nowrap;
 }
 
 .thumbreward{
@@ -78,6 +82,13 @@
 .mytable td , th{
     border-bottom: 1px solid rgba(85, 83, 83, 0.473);
     height: 30px;
+}
+
+.mytable td{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 230px;
+    white-space: nowrap;
 }
 
 .mymenu{

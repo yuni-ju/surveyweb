@@ -7,7 +7,9 @@ body{
     text-overflow: ellipsis;
 }
 
-
+table{
+    border-spacing: 0;
+}
 
 .mainwrapper{
     width: 1000px;
