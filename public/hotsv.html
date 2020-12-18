@@ -41,14 +41,14 @@
                     <% data.forEach(function(item, index) { %>
                     <tr>   
                         <td style="border-bottom: 1px solid rgba(85, 83, 83, 0.473);">
-                            <table class="svthumbnail" style="border-spacing: 20px 10px;" onclick="location.href='/svpage/<%= item.num %>'">
+                            <table class="svthumbnail" style="border-spacing: 10px 10px; text-align: left;" onclick="location.href='/svpage/<%= item.num %>'">
                                 <tr>
                                     <td rowspan="5"><img class="hotthumbimg"; src="<%= item.photo %>"></td>
                                 </tr>
-                                <tr><td colspan="2" class="hotthumbtitle"><%= item.title %> </td></tr>
+                                <tr><td colspan="2" class="hotthumbtitle" style="width: 100%"><%= item.title %> </td></tr>
                                 <tr><td colspan="2" class="hotthumbcontent"><%= item.content %> </td></tr>
                                 <tr>
-                                    <td class="hotthumbreward"><%= item.reward %> 제공</td>
+                                    <td class="hotthumbreward" style="width: 20px;"><%= item.reward %> 제공</td>
                                     <td class="hotthumbviews"><%= item.views %> views</td></tr>
                             </table>                           
                         </td>  

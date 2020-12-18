@@ -59,8 +59,8 @@
 						<% data.forEach(function(item, index) { %>                            
 							<tr style="cursor:pointer;" onclick="location.href='/svpage/<%= item.num %>'">                
                                 <td width="20px;"><%=item.num %></td>
-                                <td width="200px;"><%= item.title %> </td>
-								<td width="100px;"><%= item.reward %> </td>
+                                <td width="200px;" style="text-align: left"><%= item.title %> </td>
+								<td width="100px;" style="text-align: left"><%= item.reward %> </td>
 								<td width="10px;"><%= item.views %></td>                          
 							</tr>                        
 						<% }); %>

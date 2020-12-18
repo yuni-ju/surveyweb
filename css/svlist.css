@@ -46,8 +46,8 @@
 }
 
 .hotthumbimg{
-    width: 120px;
-    height: 150px; 
+    width: 130px;
+    height: 170px; 
     cursor:pointer;
 }
 
@@ -68,8 +68,8 @@
     color: rgb(46, 46, 46);
     font-size: 13px;
     cursor:pointer;
-    padding-bottom: 20px;
-    width: 130px;
+    padding-bottom: 20px;    
+    white-space: nowrap;
 }
 
 .hotthumbviews{
@@ -77,6 +77,8 @@
     font-size: 13px;
     cursor:pointer;
     padding-bottom: 20px;
+    white-space: nowrap;
+    width: 500px;
 }
 
 .mytable td , th{
